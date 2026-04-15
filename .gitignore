@@ -1,1 +1,18 @@
+# Credentials — never commit your real config
+config.json
+*.secrets.json
 .streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+
+# Editor
+.DS_Store
+.idea/
+.vscode/

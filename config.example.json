@@ -1,0 +1,21 @@
+{
+  "resy_config": {
+    "email": "you@example.com",
+    "password": "your_resy_password",
+    "api_key": "YOUR_RESY_API_KEY"
+  },
+  "reservation_request": {
+    "venue_id": 12345,
+    "party_size": 2,
+    "ideal_hour": 19,
+    "ideal_minute": 30,
+    "window_hours": 1,
+    "prefer_early": true,
+    "preferred_type": null,
+    "ideal_date": "2026-05-10"
+  },
+  "drop_hour": null,
+  "drop_minute": null,
+  "n_retries": 30,
+  "seconds_between_retries": 0.5
+}
