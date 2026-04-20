@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Optional
 
 from resy.exceptions import NoSlotsError
 from resy.models import ReservationRequest, Slot
@@ -26,8 +26,8 @@ def select_slot(slots: List[Slot], request: ReservationRequest) -> Slot:
     min_time = ideal - window
     max_time = ideal + window
 
-    best_slot: Slot | None = None
-    best_diff: timedelta | None = None
+    best_slot: Optional[Slot] = None
+    best_diff: Optional[timedelta] = None
 
     for slot in slots:
         start = slot.date.start

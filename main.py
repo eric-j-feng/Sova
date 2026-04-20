@@ -19,6 +19,8 @@ import logging
 import sys
 from pathlib import Path
 
+from requests.exceptions import RequestException
+
 from resy.bot import ResyBot
 from resy.exceptions import AuthError, BookingError, ExhaustedRetriesError
 from resy.models import BotConfig
@@ -62,10 +64,13 @@ def main() -> None:
         logger.error("Auth error: %s", exc)
         sys.exit(1)
     except ExhaustedRetriesError as exc:
-        logger.error("%s", exc)
+        logger.error("%s (cause: %s)", exc, exc.__cause__)
         sys.exit(1)
     except BookingError as exc:
         logger.error("Booking error: %s", exc)
+        sys.exit(1)
+    except RequestException as exc:
+        logger.error("Network error talking to Resy: %s", exc)
         sys.exit(1)
     except KeyboardInterrupt:
         print("\nAborted.")

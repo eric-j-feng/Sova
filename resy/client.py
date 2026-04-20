@@ -18,6 +18,8 @@ from resy.models import (
 logger = logging.getLogger(__name__)
 
 RESY_BASE_URL = "https://api.resy.com"
+# (connect_timeout, read_timeout) in seconds — short enough to fail fast and retry
+REQUEST_TIMEOUT = (3.0, 10.0)
 
 
 def _build_session(config: ResyConfig) -> Session:
@@ -54,6 +56,7 @@ class ResyClient:
             url,
             data={"email": self.config.email, "password": self.config.password},
             headers={"Content-Type": "application/x-www-form-urlencoded"},
+            timeout=REQUEST_TIMEOUT,
         )
         if not resp.ok:
             raise AuthError(f"Authentication failed [{resp.status_code}]: {resp.text}")
@@ -85,7 +88,7 @@ class ResyClient:
             "venue_id": venue_id,
         }
         logger.info("[%s] Searching for slots on %s for %d...", datetime.now().strftime("%H:%M:%S"), day, party_size)
-        resp = self.session.get(url, params=params)
+        resp = self.session.get(url, params=params, timeout=REQUEST_TIMEOUT)
         if not resp.ok:
             raise HTTPError(f"Find failed [{resp.status_code}]: {resp.text}")
 
@@ -103,7 +106,7 @@ class ResyClient:
             "party_size": party_size,
             "day": day,
         }
-        resp = self.session.get(url, params=params)
+        resp = self.session.get(url, params=params, timeout=REQUEST_TIMEOUT)
         if not resp.ok:
             raise HTTPError(f"Details failed [{resp.status_code}]: {resp.text}")
 
@@ -126,7 +129,7 @@ class ResyClient:
             "Referrer": "https://widgets.resy.com/",
             "Cache-Control": "no-cache",
         }
-        resp = self.session.post(url, data=data, headers=headers)
+        resp = self.session.post(url, data=data, headers=headers, timeout=REQUEST_TIMEOUT)
         if not resp.ok:
             raise BookingError(f"Booking failed [{resp.status_code}]: {resp.text}")
 
